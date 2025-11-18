@@ -38,3 +38,81 @@ select first_name
       ,ltrim(first_name, 'E') as "ltrim"
       ,replace(rpad(first_name, 10, '*'), '*', '-') as "Lpad"
 from employees;
+
+select *
+from employees;
+
+select job_id, sum(salary), count(job_id)
+from employees
+group by job_id
+order by 2 desc;
+
+select to_char(hire_date, 'rrrr') as "Year"
+      ,count(*) as "인원"
+from employees
+where hire_date >= to_date('2000/01/01', 'rrrr/mm/dd') -- 조건 대상 table
+group by to_char(hire_date, 'rrrr')
+having count(*) > 1 -- 조건 대상 group 대상으로.
+order by 2 desc;
+
+-- 년도, 부서 입사인원 파악.
+select to_char(hire_date, 'rrrr') as "Year"
+      ,department_id as "부서"
+      ,count(*) as "인원"
+from employees
+group by to_char(hire_date, 'rrrr'), department_id;
+
+
+select e.*, d.department_name
+from employees e 
+join jobs j on e.job_id = j.job_id
+join departments d on e.department_id = d.department_id
+where e.first_name = 'Alexander';
+
+select e.*
+from employees e
+    ,jobs j
+    ,departments d
+where e.job_id = j.job_id
+and   e.department_id = d.department_id
+and   e.first_name = 'Alexander';
+
+select *
+from jobs;
+
+select *
+from departments;
+
+select *
+from locations;
+
+
+SELECT e.employee_id "사원ID"
+      ,e.first_name || '-' || e.last_name "사원이름"
+      ,ee.employee_id "Manage ID"
+      ,ee.first_name || '-' || ee.last_name "Manager이름"
+FROM employees e
+LEFT OUTER JOIN employees ee ON e.manager_id = ee.employee_id
+ORDER BY 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
