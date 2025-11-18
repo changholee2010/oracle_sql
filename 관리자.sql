@@ -9,6 +9,9 @@ create user scott identified by tiger
 default tablespace users
 temporary tablespace temp;
 grant connect, resource, unlimited tablespace to scott;
+grant create view to scott;
+grant create synonym to scott;
+grant create public synonym to scott;
 
 create user hr identified by hr
 default tablespace users

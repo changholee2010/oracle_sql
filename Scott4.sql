@@ -223,6 +223,34 @@ from (select name, height, deptno1
                                   from student
                                   group by deptno1)) a
 join department d on a.deptno1 = d.deptno;
+
+select d.dname, height max_height, name, height
+from (SELECT name, height, deptno1,
+      -- 각 부서(deptno1) 내에서 height를 기준으로 순위(Rank) 매기기
+      RANK() OVER (PARTITION BY deptno1 ORDER BY height DESC) AS rnk 
+      FROM student) a
+join department d on a.deptno1 = d.deptno
+where a.rnk = 1;
+
+select *
+from emp;
+
+drop sequence emp_seq;
+create sequence emp_seq
+minvalue 1
+maxvalue 10
+cycle
+cache 2;
+
+select emp_seq.nextval from dual;
+
+create public synonym proff for professor;
+
+select *
+from prof;
+
+grant select on professor to hr;
+
 /*
 101	182
 102	179
@@ -234,8 +262,6 @@ join department d on a.deptno1 = d.deptno;
 
 select *
 from department;
-
-
 
 
 
