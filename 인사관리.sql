@@ -95,24 +95,48 @@ FROM employees e
 LEFT OUTER JOIN employees ee ON e.manager_id = ee.employee_id
 ORDER BY 1;
 
+commit;
+
+select /*+ INDEX(e EMP_EMP_ID_PK) */ *
+from employees e;
+
+select * from employees order by email;
+
+delete from employees
+where employee_id > 206;
+
+select *
+from employees
+order by salary;
+
+--insert into employees
+select /*+ INDEX(e EMP_EMAIL_UK) */ employee_id, first_name, last_name,  email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id
+from employees e; -- 0.003 / 50
+
+--insert into employees
+select employee_id, first_name, last_name,  email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id
+from employees
+order by salary; -- 0.194 / 50
+
+select *
+from hr.employees;
+
+select *
+from proff;
 
 
 
+create table with_test1 (
+no number,
+name varchar2(10),
+pay number(6));
+ 
+create index idx_with_pay on with_test1(pay);
 
+select max(pay)-min(pay) from with_test1;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+with a as (select /*+ INDEX_DESC(w idx_with_pay) */ pay from with_test1 w where pay > 0 and rownum = 1)
+    ,b as (select /*+ INDEX(w idx_with_pay) */ pay from with_test1 w where pay > 0 and rownum = 1)
+select a.pay - b.pay from a, b;
 
 
